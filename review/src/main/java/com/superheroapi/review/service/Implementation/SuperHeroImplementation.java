@@ -1,12 +1,17 @@
 package com.superheroapi.review.service.Implementation;
 
 import com.superheroapi.review.Dto.SuperHeroDto;
+import com.superheroapi.review.Dto.SuperHeroResponse;
 import com.superheroapi.review.exceptions.SuperHeroNotFoundException;
 import com.superheroapi.review.models.SuperHero;
 import com.superheroapi.review.repository.SuperHeroRepository;
 import com.superheroapi.review.service.SuperHeroService;
+import org.apache.catalina.connector.Request;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
@@ -39,11 +44,21 @@ public class SuperHeroImplementation implements SuperHeroService {
     return heroResponse;
 
     } @Override
-    public List<SuperHeroDto> getAllSuperHero() {
-List<SuperHero> heroList = superHeroRepository.findAll();
+    public SuperHeroResponse getAllSuperHero(int PageNo, int PageSize) {
+        Pageable pageable = (Pageable) PageRequest.of(PageNo, PageSize);
+        Page <SuperHero> heroList = superHeroRepository.findAll((org.springframework.data.domain.Pageable) pageable);
+        List<SuperHero>  list_Pokemon = heroList.getContent();
+        List<SuperHeroDto> content = list_Pokemon.stream().map(hero-> MappingToDto(hero)).collect(Collectors.toList());
 
-return heroList.stream().map(hero-> MappingToDto(hero)).collect(Collectors.toList());
+        SuperHeroResponse superHeroResponse  = new SuperHeroResponse();
 
+        superHeroResponse.setPageNo(heroList.getNumber());
+        superHeroResponse.setPageSize(heroList.getSize());
+        superHeroResponse.setTotalPages(heroList.getTotalPages());
+         superHeroResponse.setTotalElements(heroList.getTotalElements());
+         superHeroResponse.setContent(content);
+
+         return superHeroResponse;
     }
 
     @Override

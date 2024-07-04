@@ -1,6 +1,7 @@
 package com.superheroapi.review.controller;
 
 import com.superheroapi.review.Dto.SuperHeroDto;
+import com.superheroapi.review.Dto.SuperHeroResponse;
 import com.superheroapi.review.service.SuperHeroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -28,8 +29,12 @@ public class SuperHeroController {
     }
 
     @GetMapping("/heroes")
-    public ResponseEntity<List<SuperHeroDto>> getSuperHeroes(){
-return new ResponseEntity<>( superHeroService.getAllSuperHero(), HttpStatus.OK);
+    public ResponseEntity<SuperHeroResponse> getSuperHeroes(
+            @RequestParam(value = "PageNo", defaultValue = "0",  required = false) int PageNo,
+            @RequestParam(value = "PageSize", defaultValue = "10",  required = false) int PageSize
+    ){
+      SuperHeroResponse response = superHeroService.getAllSuperHero(PageNo, PageSize);
+return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
