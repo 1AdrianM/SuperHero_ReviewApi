@@ -1,22 +1,27 @@
 package com.superheroapi.review.service.Implementation;
 
+import com.superheroapi.review.Dto.PowerStatsDto;
 import com.superheroapi.review.Dto.SuperHeroDto;
 import com.superheroapi.review.Dto.SuperHeroResponse;
 import com.superheroapi.review.exceptions.SuperHeroNotFoundException;
+import com.superheroapi.review.models.PowerStats;
 import com.superheroapi.review.models.SuperHero;
 import com.superheroapi.review.repository.SuperHeroRepository;
 import com.superheroapi.review.service.SuperHeroService;
 import org.apache.catalina.connector.Request;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
 public class SuperHeroImplementation implements SuperHeroService {
-
+@Autowired
     private final SuperHeroRepository superHeroRepository;
 
     public SuperHeroImplementation(SuperHeroRepository superHeroRepository) {
@@ -24,31 +29,41 @@ public class SuperHeroImplementation implements SuperHeroService {
     }
     @Override
     public SuperHeroDto createSuperHero(SuperHeroDto superHeroDto) {
-      SuperHero hero =  new SuperHero();
+        PowerStats powerStats = new PowerStats();
+        powerStats.setId(superHeroDto.getPowerStatsDto().Id);
+        powerStats.setHero_level(superHeroDto.getPowerStatsDto().hero_level);
+        powerStats.setIntelligence(superHeroDto.getPowerStatsDto().getIntelligence());
+        powerStats.setStrength(superHeroDto.getPowerStatsDto().getStrength());
+        powerStats.setType(superHeroDto.getPowerStatsDto().getType());
+
     //
+        SuperHero hero  = new SuperHero();
       hero.setId(superHeroDto.getId());
     hero.setName(superHeroDto.getName());
     hero.setStatus(superHeroDto.getStatus());
     hero.setAlignment(superHeroDto.getAlignment());
-    hero.setPowerStats(superHeroDto.);
+    hero.setPowerStats(powerStats);
    //
+        powerStats.setSuperHero(hero);// Estableciendo relacion
     SuperHero Hero = superHeroRepository.save(hero);
    //
     SuperHeroDto heroResponse = new SuperHeroDto();
-    Hero.setId(heroResponse.getId());
-    Hero.setName(heroResponse.getName());
-    Hero.setStatus(heroResponse.getStatus());
-    Hero.setAlignment(heroResponse.getAlignment());
-   /// Hero.setPoResponse.getPowerStatsId());
-//
+
+    heroResponse.setId(Hero.getId());
+    heroResponse.setName(Hero.getName());
+    heroResponse.setStatus(Hero.getStatus());
+    heroResponse.setAlignment(Hero.getAlignment());
+    PowerStatsDto PS = MappingToPowerStatDto(Hero.getPowerStats());
+ heroResponse.setPowerStatsDto(PS);
+    //
     return heroResponse;
 
     } @Override
     public SuperHeroResponse getAllSuperHero(int PageNo, int PageSize) {
-        Pageable pageable = (Pageable) PageRequest.of(PageNo, PageSize);
-        Page <SuperHero> heroList = superHeroRepository.findAll((org.springframework.data.domain.Pageable) pageable);
+        Pageable pageable = PageRequest.of(PageNo, PageSize);
+        Page <SuperHero> heroList = superHeroRepository.findAll( pageable);
         List<SuperHero>  list_Pokemon = heroList.getContent();
-        List<SuperHeroDto> content = list_Pokemon.stream().map(hero-> MappingToDto(hero)).collect(Collectors.toList());
+        List<SuperHeroDto> content = list_Pokemon.stream().map(this::MappingToSuperHeroDto).collect(Collectors.toList());
 
         SuperHeroResponse superHeroResponse  = new SuperHeroResponse();
 
@@ -65,20 +80,21 @@ public class SuperHeroImplementation implements SuperHeroService {
     @Override
     public SuperHeroDto getSuperHeroId(int id) {
         SuperHero superHero = superHeroRepository.findById(id).orElseThrow(()-> new SuperHeroNotFoundException("Super Hero not Found by this Id"));
-        return MappingToDto(superHero);
+        return MappingToSuperHeroDto(superHero);
     }
 
     @Override
     public SuperHeroDto updateSuperHero(SuperHeroDto superHeroDto, int id) {
          SuperHero superHero =  superHeroRepository.findById(id).orElseThrow(()-> new SuperHeroNotFoundException("Cant Update this SuperHero"));
-       superHero.setId(superHeroDto.getId());
-       superHero.setAlignment(superHeroDto.getAlignment());
+
+         superHero.setAlignment(superHeroDto.getAlignment());
        superHero.setName(superHeroDto.getName());
-    //   superHero.setPowerStatsId(superHeroDto.getPowerStatsId());
+       PowerStats PS =  MappingToPowerStatEntity(superHeroDto.getPowerStatsDto());
+      superHero.setPowerStats(PS);
        superHero.setStatus(superHeroDto.getStatus());
 
        SuperHero updatedHero = superHeroRepository.save(superHero);
-       return MappingToDto(updatedHero);
+       return MappingToSuperHeroDto(updatedHero);
     }
 
     @Override
@@ -89,14 +105,38 @@ public class SuperHeroImplementation implements SuperHeroService {
     }
 
 
-    private SuperHeroDto MappingToDto(SuperHero superHero){
-SuperHeroDto heroDto =  new SuperHeroDto();
-heroDto.setId(superHero.getId());
-heroDto.setName(superHero.getName());
-heroDto.setStatus(superHero.getStatus());
-heroDto.setAlignment(superHero.getAlignment());
-//heroDto.setPowerStatsId(superHero.getPowerStatsId());
-    return heroDto;
+    private SuperHeroDto MappingToSuperHeroDto(SuperHero superHero){
+        PowerStatsDto powerStat_Dto = MappingToPowerStatDto(superHero.getPowerStats());
+return SuperHeroDto.builder()
+        .Id(superHero.getId())
+         .name(superHero.getName())
+        .status(superHero.getStatus())
+        .alignment(superHero.getAlignment())
+        .powerStatsDto(powerStat_Dto)
+        .build();
+
+
+    }
+    private PowerStatsDto MappingToPowerStatDto(PowerStats powerStats){
+        return PowerStatsDto.builder()
+    .Id(powerStats.getId())
+     .type(powerStats.getType())
+   .hero_level(powerStats.getHero_level())
+                .strength(powerStats.getStrength())
+                .intelligence(powerStats.getIntelligence())
+                .speed(powerStats.getSpeed())
+        .build();
+
+    }
+    private PowerStats MappingToPowerStatEntity(PowerStatsDto powerStatsDto){
+      return PowerStats.builder()
+        .Id(powerStatsDto.getId())
+        .type(powerStatsDto.getType())
+        .hero_level(powerStatsDto.getHero_level())
+        .strength(powerStatsDto.getStrength())
+        .intelligence(powerStatsDto.getIntelligence())
+        .speed(powerStatsDto.getSpeed())
+              .build();
 
     }
 }

@@ -14,5 +14,5 @@ public class ReviewDto {
     public int Id;
     public String Title;
     public String content;
-    public int start;
+    public int stars;
 }

@@ -8,6 +8,7 @@ import com.superheroapi.review.models.SuperHero;
 import com.superheroapi.review.repository.ReviewRepository;
 import com.superheroapi.review.repository.SuperHeroRepository;
 import com.superheroapi.review.service.ReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,8 +17,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewImplementation implements ReviewService {
+    @Autowired
     private  final ReviewRepository reviewRepository;
   private final SuperHeroRepository superHeroRepository;
+
     public ReviewImplementation(ReviewRepository reviewRepository, SuperHeroRepository superHeroRepository) {
         this.reviewRepository = reviewRepository;
         this.superHeroRepository = superHeroRepository;
@@ -46,20 +49,22 @@ public class ReviewImplementation implements ReviewService {
         Review review = MappingToEntity(reviewDto);
         SuperHero hero = superHeroRepository.findById(HeroId).orElseThrow(()->  new SuperHeroNotFoundException("ID Not FOUND"));
         // Reparar
+        review.setSuperHero(hero);
         Review newReview = reviewRepository.save(review);
        return MappingToDto(newReview);
 
     }
 
     @Override
-    public List<ReviewDto> getReviewsbyHeroId(int id) {
+    public List<ReviewDto> getReviewsByHeroId(int id) {
         List<Review> reviewList = reviewRepository.findSuperHeroById(id);
 
-        return reviewList.stream().map(r -> MappingToDto(r)).collect(Collectors.toList());
+        return reviewList.stream().map(this::MappingToDto).collect(Collectors.toList());
     }
 
     @Override
-    public ReviewDto getReviews(ReviewDto reviewDto) {
+    public ReviewDto getReviewById(ReviewDto reviewDto,  int  id) {
+
         return null;
     }
 
@@ -79,7 +84,7 @@ public class ReviewImplementation implements ReviewService {
 
         reviewDto.setId(review.getId());
         reviewDto.setContent(review.getContent());
-        reviewDto.setStart(reviewDto.getStart());
+        reviewDto.setStars(reviewDto.getStars());
         reviewDto.setTitle(reviewDto.getTitle());
 
         return reviewDto;
@@ -90,7 +95,7 @@ public class ReviewImplementation implements ReviewService {
 
         review.setId(reviewDto.getId());
         review.setContent(reviewDto.getContent());
-        review.setStart(reviewDto.getStart());
+        review.setStars(reviewDto.getStars());
         review.setTitle(reviewDto.getTitle());
 
         return review;

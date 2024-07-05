@@ -1,5 +1,6 @@
 package com.superheroapi.review.Dto;
 
+import com.superheroapi.review.models.PowerStats;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,5 @@ public class SuperHeroDto {
     public String name;
     public String alignment;
     public String status;
-    private int powerStatsId;
+    private  PowerStatsDto powerStatsDto;
 }

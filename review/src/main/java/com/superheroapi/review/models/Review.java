@@ -17,7 +17,7 @@ public class Review {
 public int id;
 public String Title;
 public String content;
-public int start;
+public int stars;
 @ManyToOne(fetch =FetchType.LAZY)
 @JoinColumn(name = "superhero_id")
 private SuperHero superHero;
