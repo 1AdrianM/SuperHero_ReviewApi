@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class SuperHeroDto {
     public int Id;
     public String name;
-    public int powerStatsId;
     public String alignment;
     public String status;
+    private int powerStatsId;
 }

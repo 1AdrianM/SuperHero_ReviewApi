@@ -1,6 +1,7 @@
 package com.superheroapi.review.service.Implementation;
 
 import com.superheroapi.review.Dto.ReviewDto;
+import com.superheroapi.review.exceptions.ReviewNotFoundException;
 import com.superheroapi.review.exceptions.SuperHeroNotFoundException;
 import com.superheroapi.review.models.Review;
 import com.superheroapi.review.models.SuperHero;
@@ -44,7 +45,7 @@ public class ReviewImplementation implements ReviewService {
     public ReviewDto createReview(ReviewDto reviewDto, int HeroId) {
         Review review = MappingToEntity(reviewDto);
         SuperHero hero = superHeroRepository.findById(HeroId).orElseThrow(()->  new SuperHeroNotFoundException("ID Not FOUND"));
-        //review.setHero(hero); Reparar
+        // Reparar
         Review newReview = reviewRepository.save(review);
        return MappingToDto(newReview);
 
@@ -52,9 +53,9 @@ public class ReviewImplementation implements ReviewService {
 
     @Override
     public List<ReviewDto> getReviewsbyHeroId(int id) {
-        List<Review> reviewDtoList = reviewRepository.findHerobyId(id);
+        List<Review> reviewList = reviewRepository.findSuperHeroById(id);
 
-        return reviewDtoList.stream().map(r -> MappingToDto(r)).collect(Collectors.toList());
+        return reviewList.stream().map(r -> MappingToDto(r)).collect(Collectors.toList());
     }
 
     @Override
@@ -68,8 +69,10 @@ public class ReviewImplementation implements ReviewService {
     }
 
     @Override
-    public ReviewDto deleteReviews(ReviewDto reviewDto, int id) {
-        return null;
+    public void deleteReviews(ReviewDto reviewDto, int id) {
+        Review review = reviewRepository.findById(id).orElseThrow(()-> new ReviewNotFoundException("Could not deleted"));
+        reviewRepository.delete(review);
+
     }
     public ReviewDto MappingToDto(Review review){
         ReviewDto reviewDto = new ReviewDto();

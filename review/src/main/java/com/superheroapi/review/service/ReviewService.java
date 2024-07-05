@@ -10,5 +10,5 @@ public interface ReviewService {
      List<ReviewDto> getReviewsbyHeroId(int id);
     ReviewDto getReviews(ReviewDto reviewDto);
     ReviewDto updateReviews(ReviewDto reviewDto, int reviewId, int heroId);
-    ReviewDto deleteReviews(ReviewDto reviewDto, int id);
+    void deleteReviews(ReviewDto reviewDto, int id);
 }

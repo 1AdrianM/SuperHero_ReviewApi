@@ -7,18 +7,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
-public class Review {
+public class PowerStats {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-public int id;
-public String Title;
-public String content;
-public int start;
-@ManyToOne(fetch =FetchType.LAZY)
-@JoinColumn(name = "superhero_id")
-private SuperHero superHero;
+    public int Id;
+    public int hero_level;
+    public int strength;
+    public String type;
+    public int speed;
+    public int intelligence;
+
+    @OneToOne
+    @JoinColumn(name="super_hero_id")
+    private SuperHero superHero;
+
 }

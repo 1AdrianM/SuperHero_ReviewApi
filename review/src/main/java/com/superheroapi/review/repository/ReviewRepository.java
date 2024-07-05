@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
-    List<Review> findHerobyId(int heroId);
+    List<Review> findSuperHeroById(int heroId);
 }

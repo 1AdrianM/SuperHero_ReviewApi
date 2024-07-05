@@ -30,7 +30,7 @@ public class SuperHeroImplementation implements SuperHeroService {
     hero.setName(superHeroDto.getName());
     hero.setStatus(superHeroDto.getStatus());
     hero.setAlignment(superHeroDto.getAlignment());
-    hero.setPowerStatsId(superHeroDto.getPowerStatsId());
+    hero.setPowerStats(superHeroDto.);
    //
     SuperHero Hero = superHeroRepository.save(hero);
    //
@@ -39,7 +39,7 @@ public class SuperHeroImplementation implements SuperHeroService {
     Hero.setName(heroResponse.getName());
     Hero.setStatus(heroResponse.getStatus());
     Hero.setAlignment(heroResponse.getAlignment());
-    Hero.setPowerStatsId(heroResponse.getPowerStatsId());
+   /// Hero.setPoResponse.getPowerStatsId());
 //
     return heroResponse;
 
@@ -56,6 +56,7 @@ public class SuperHeroImplementation implements SuperHeroService {
         superHeroResponse.setPageSize(heroList.getSize());
         superHeroResponse.setTotalPages(heroList.getTotalPages());
          superHeroResponse.setTotalElements(heroList.getTotalElements());
+         superHeroResponse.setLast(heroList.isLast());
          superHeroResponse.setContent(content);
 
          return superHeroResponse;
@@ -73,7 +74,7 @@ public class SuperHeroImplementation implements SuperHeroService {
        superHero.setId(superHeroDto.getId());
        superHero.setAlignment(superHeroDto.getAlignment());
        superHero.setName(superHeroDto.getName());
-       superHero.setPowerStatsId(superHeroDto.getPowerStatsId());
+    //   superHero.setPowerStatsId(superHeroDto.getPowerStatsId());
        superHero.setStatus(superHeroDto.getStatus());
 
        SuperHero updatedHero = superHeroRepository.save(superHero);
@@ -94,7 +95,7 @@ heroDto.setId(superHero.getId());
 heroDto.setName(superHero.getName());
 heroDto.setStatus(superHero.getStatus());
 heroDto.setAlignment(superHero.getAlignment());
-heroDto.setPowerStatsId(superHero.getPowerStatsId());
+//heroDto.setPowerStatsId(superHero.getPowerStatsId());
     return heroDto;
 
     }

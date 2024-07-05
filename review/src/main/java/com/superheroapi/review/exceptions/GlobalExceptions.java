@@ -18,4 +18,14 @@ public class GlobalExceptions {
 
         return new ResponseEntity<ErrorModel>(errorObj, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ErrorModel>  handleReviewNotFoundException(ReviewNotFoundException ex, WebRequest request){
+        ErrorModel errorObj = new ErrorModel();
+
+        errorObj.setMessage(ex.getMessage());
+        errorObj.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObj.setTimestamp(new Date());
+        return new ResponseEntity<ErrorModel>(errorObj, HttpStatus.NOT_FOUND);
+    }
 }

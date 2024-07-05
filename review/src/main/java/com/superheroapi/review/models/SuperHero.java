@@ -1,13 +1,13 @@
 package com.superheroapi.review.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 
@@ -20,7 +20,13 @@ public class SuperHero {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int Id;
 public String name;
-public int powerStatsId;
+public String weakness;
 public String alignment;
 public String status;
+@OneToMany(mappedBy ="superHero" , cascade = CascadeType.ALL, orphanRemoval = true)
+private List<Review> reviewList = new ArrayList<Review>();
+@OneToOne(mappedBy = "superHero", cascade =CascadeType.ALL)
+    private PowerStats powerStats;
+
+
 }
