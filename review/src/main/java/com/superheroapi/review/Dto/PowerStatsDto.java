@@ -13,11 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+
 
 public class PowerStatsDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int Id;
     public int hero_level;
     public int strength;

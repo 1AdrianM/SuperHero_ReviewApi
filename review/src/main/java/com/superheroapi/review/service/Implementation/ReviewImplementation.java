@@ -66,11 +66,11 @@ public class ReviewImplementation implements ReviewService {
     public ReviewDto getReviewById(ReviewDto reviewDto,  int  id) {
 
         return null;
-    }
-
+    }// Tomando Nota las comparaciones  de id   seran  lo mas popular en esta clase
     @Override
     public ReviewDto updateReviews(ReviewDto reviewDto, int reviewId, int heroId) {
         return null;
+        //Mas tarde extrae ambos Id  comparalos y luego inserte el actualizado en el  modelo atra ves del dto luego save
     }
 
     @Override

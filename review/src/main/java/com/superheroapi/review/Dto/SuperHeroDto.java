@@ -15,5 +15,5 @@ public class SuperHeroDto {
     public String name;
     public String alignment;
     public String status;
-    private  PowerStatsDto powerStatsDto;
+    private  PowerStatsDto powerStats;
 }

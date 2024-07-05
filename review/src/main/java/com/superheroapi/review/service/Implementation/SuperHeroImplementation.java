@@ -30,11 +30,11 @@ public class SuperHeroImplementation implements SuperHeroService {
     @Override
     public SuperHeroDto createSuperHero(SuperHeroDto superHeroDto) {
         PowerStats powerStats = new PowerStats();
-        powerStats.setId(superHeroDto.getPowerStatsDto().Id);
-        powerStats.setHero_level(superHeroDto.getPowerStatsDto().hero_level);
-        powerStats.setIntelligence(superHeroDto.getPowerStatsDto().getIntelligence());
-        powerStats.setStrength(superHeroDto.getPowerStatsDto().getStrength());
-        powerStats.setType(superHeroDto.getPowerStatsDto().getType());
+        powerStats.setId(superHeroDto.getPowerStats().getId());
+        powerStats.setHero_level(superHeroDto.getPowerStats().getHero_level());
+        powerStats.setIntelligence(superHeroDto.getPowerStats().getIntelligence());
+        powerStats.setStrength(superHeroDto.getPowerStats().getStrength());
+        powerStats.setType(superHeroDto.getPowerStats().getType());
 
     //
         SuperHero hero  = new SuperHero();
@@ -54,7 +54,7 @@ public class SuperHeroImplementation implements SuperHeroService {
     heroResponse.setStatus(Hero.getStatus());
     heroResponse.setAlignment(Hero.getAlignment());
     PowerStatsDto PS = MappingToPowerStatDto(Hero.getPowerStats());
- heroResponse.setPowerStatsDto(PS);
+ heroResponse.setPowerStats(PS);
     //
     return heroResponse;
 
@@ -89,7 +89,7 @@ public class SuperHeroImplementation implements SuperHeroService {
 
          superHero.setAlignment(superHeroDto.getAlignment());
        superHero.setName(superHeroDto.getName());
-       PowerStats PS =  MappingToPowerStatEntity(superHeroDto.getPowerStatsDto());
+       PowerStats PS =  MappingToPowerStatEntity(superHeroDto.getPowerStats());
       superHero.setPowerStats(PS);
        superHero.setStatus(superHeroDto.getStatus());
 
@@ -112,7 +112,7 @@ return SuperHeroDto.builder()
          .name(superHero.getName())
         .status(superHero.getStatus())
         .alignment(superHero.getAlignment())
-        .powerStatsDto(powerStat_Dto)
+        .powerStats(powerStat_Dto)
         .build();
 
 
