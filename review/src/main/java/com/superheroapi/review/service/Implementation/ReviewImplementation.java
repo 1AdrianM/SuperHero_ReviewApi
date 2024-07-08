@@ -63,19 +63,38 @@ public class ReviewImplementation implements ReviewService {
     }
 
     @Override
-    public ReviewDto getReviewById(ReviewDto reviewDto,  int  id) {
+    public ReviewDto getReviewById(int reviewId,  int  heroId) {
+         Review review = reviewRepository.findById(reviewId).orElseThrow(()-> new ReviewNotFoundException("Not found id"));
+SuperHero superHero = superHeroRepository.findById(heroId).orElseThrow(()-> new SuperHeroNotFoundException("Not found super hero by  this  id"));
+if (review.getSuperHero().getId() != superHero.getId()){
+    throw new ReviewNotFoundException("Ids Didnt match");
+}
+return MappingToDto(review);
 
-        return null;
-    }// Tomando Nota las comparaciones  de id   seran  lo mas popular en esta clase
+    }
+    // Tomando Nota las comparaciones  de id   seran  lo mas popular en esta clase
     @Override
     public ReviewDto updateReviews(ReviewDto reviewDto, int reviewId, int heroId) {
-        return null;
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()-> new ReviewNotFoundException("Not found id"));
+        SuperHero superHero = superHeroRepository.findById(heroId).orElseThrow(()-> new SuperHeroNotFoundException("Not found super hero by  this  id"));
+        if (review.getSuperHero().getId() != superHero.getId()){
+            throw new ReviewNotFoundException("Ids Didnt match");
+        }
+        review.setTitle(reviewDto.getTitle());
+        review.setContent(reviewDto.getContent());
+        review.setStars(reviewDto.getStars());
+        Review updatedReview = reviewRepository.save(review);
+        return MappingToDto(updatedReview);
         //Mas tarde extrae ambos Id  comparalos y luego inserte el actualizado en el  modelo atra ves del dto luego save
     }
 
     @Override
-    public void deleteReviews(ReviewDto reviewDto, int id) {
-        Review review = reviewRepository.findById(id).orElseThrow(()-> new ReviewNotFoundException("Could not deleted"));
+    public void deleteReviews(int reviewId, int heroId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()-> new ReviewNotFoundException("Not found id"));
+        SuperHero superHero = superHeroRepository.findById(heroId).orElseThrow(()-> new SuperHeroNotFoundException("Not found super hero by  this  id"));
+        if (review.getSuperHero().getId() != superHero.getId()){
+            throw new ReviewNotFoundException("Ids Didnt match");
+        }
         reviewRepository.delete(review);
 
     }
