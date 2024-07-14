@@ -22,14 +22,14 @@ public class SuperHeroController {
         this.superHeroService = superHeroService;
     }
 
-    @PostMapping("hero/create")
+    @PostMapping("superhero/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SuperHeroDto> createSuperHero(@RequestBody SuperHeroDto  superHeroDto){
      return new ResponseEntity<>(superHeroService.createSuperHero(superHeroDto), HttpStatus.CREATED);
 
     }
 
-    @GetMapping("/heroes")
+    @GetMapping("/superheroes")
     public ResponseEntity<SuperHeroResponse> getSuperHeroes(
             @RequestParam(value = "PageNo", defaultValue = "0",  required = false) int PageNo,
             @RequestParam(value = "PageSize", defaultValue = "10",  required = false) int PageSize
@@ -39,18 +39,18 @@ return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
-    @GetMapping("hero/{id}")
-    public ResponseEntity<SuperHeroDto> getSuperHerobyId(@PathVariable  int id){
+    @GetMapping("superhero/{id}")
+    public ResponseEntity<SuperHeroDto> getSuperHeroById(@PathVariable  int id){
  return new ResponseEntity<>(superHeroService.getSuperHeroId(id), HttpStatus.OK);
     }
 
 
-    @PutMapping("hero/{id}/update")
+    @PutMapping("superhero/{id}/update")
     public ResponseEntity<SuperHeroDto>  updateSuperHero(@RequestBody SuperHeroDto heroDto, @PathVariable int id){
  return new ResponseEntity<>(superHeroService.updateSuperHero(heroDto,id ), HttpStatus.OK);
     }
 
-    @DeleteMapping("hero/{id}/delete")
+    @DeleteMapping("superhero/{id}/delete")
     public ResponseEntity<String>  deleteSuperHero(@PathVariable int id){
         superHeroService.deleteSuperHeroId(id);
         return new ResponseEntity<>("Hero deleted",HttpStatus.OK);

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/")
 public class ReviewController {
@@ -17,25 +19,27 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping("hero/{heroId}/reviews/create")
+    @PostMapping("superhero/{superheroId}/reviews/create")
 @ResponseStatus( HttpStatus.CREATED)
-public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto rdto, @PathVariable("heroId") int heroId){
-    return new ResponseEntity<>(reviewService.createReview(rdto, heroId), HttpStatus.CREATED );
+public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto reviewDto, @PathVariable(value = "superheroId") int heroId){
+    return new ResponseEntity<>(reviewService.createReview(reviewDto, heroId), HttpStatus.CREATED );
 }
 
-    @GetMapping("hero/{heroId}/reviews/{id}")
- public ResponseEntity<ReviewDto> getReviews (@PathVariable("heroId") int heroId, @PathVariable("id") int id){
-        return new ResponseEntity<ReviewDto>(reviewService.getReviewById(id , heroId ), HttpStatus.OK);
+    @GetMapping("superhero/{superheroId}/reviews/{id}")
+ public ResponseEntity<ReviewDto> getReviews (@PathVariable(value = "superheroId") int heroId, @PathVariable("id") int id){
+        return new ResponseEntity<>(reviewService.getReviewById(id , heroId ), HttpStatus.OK);
     }
 
-   // @GetMapping("")
-
-    @PutMapping("hero/{heroId}/reviews/{id}/delete")
- public ResponseEntity<ReviewDto> updateReview(@PathVariable ReviewDto reviewDto, @PathVariable("heroId") int heroId  , @PathVariable("id") int id ) {
+    @GetMapping("superhero/{superheroId}/reviews/")
+ public ResponseEntity <List<ReviewDto>> getReviewsByHeroId(@PathVariable(value= "superheroId") int id){
+          return new ResponseEntity<>( reviewService.getReviewsByHeroId(id), HttpStatus.OK);
+    }
+    @PutMapping("superhero/{superheroId}/reviews/{id}/delete")
+ public ResponseEntity<ReviewDto> updateReview(@PathVariable ReviewDto reviewDto, @PathVariable(value = "superheroId") int heroId  , @PathVariable("id") int id ) {
         return new ResponseEntity<>(reviewService.updateReviews(reviewDto, id, heroId), HttpStatus.OK );
     }
-    @DeleteMapping("hero/{heroId}/reviews/{id}/delete")
-    public ResponseEntity<String> deleteReview(@PathVariable("heroId") int heroId, @PathVariable("id") int id){
+    @DeleteMapping("superhero/{superheroId}/reviews/{id}/delete")
+    public ResponseEntity<String> deleteReview(@PathVariable(value = "superheroId") int heroId, @PathVariable("id") int id){
         reviewService.deleteReviews(id, heroId);
         return new ResponseEntity<>("Review deleted successfully", HttpStatus.OK);
 
