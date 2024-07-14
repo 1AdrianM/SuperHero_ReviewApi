@@ -11,7 +11,7 @@ import com.superheroapi.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,29 +26,10 @@ public class ReviewImplementation implements ReviewService {
         this.superHeroRepository = superHeroRepository;
     }
 
-   //Override
-  /*lic ReviewDto createReview(ReviewDto reviewDto) {
-        Review review = new Review();
-        review.setId(reviewDto.getId());
-        review.setTitle(reviewDto.getTitle());
-        review.setStart(reviewDto.getStart());
-        review.setContent(reviewDto.getContent());
-
-        Review newReview = reviewRepository.save(review);
-        ReviewDto reviewResponse = new ReviewDto();
-        newReview.setId(reviewResponse.getId());
-        newReview.setTitle(reviewResponse.getTitle());
-        newReview.setStart(reviewResponse.getStart());
-        newReview.setContent(review.getContent());
-
-        return MappingToDto(newReview);
-    }
-*/
     @Override
     public ReviewDto createReview(ReviewDto reviewDto, int HeroId) {
         Review review = MappingToEntity(reviewDto);
         SuperHero hero = superHeroRepository.findById(HeroId).orElseThrow(()->  new SuperHeroNotFoundException("ID Not FOUND"));
-        // Reparar
         review.setSuperHero(hero);
         Review newReview = reviewRepository.save(review);
        return MappingToDto(newReview);

@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.superheroapi.review.Mapper.Mapper.*;
+
 @Service
 public class SuperHeroImplementation implements SuperHeroService {
 @Autowired
@@ -63,7 +66,7 @@ public class SuperHeroImplementation implements SuperHeroService {
         Pageable pageable = PageRequest.of(PageNo, PageSize);
         Page <SuperHero> heroList = superHeroRepository.findAll( pageable);
         List<SuperHero>  list_Pokemon = heroList.getContent();
-        List<SuperHeroDto> content = list_Pokemon.stream().map(this::MappingToSuperHeroDto).collect(Collectors.toList());
+        List<SuperHeroDto> content = list_Pokemon.stream().map(p -> MappingToSuperHeroDto(p)).collect(Collectors.toList());
 
         SuperHeroResponse superHeroResponse  = new SuperHeroResponse();
 
@@ -105,38 +108,6 @@ public class SuperHeroImplementation implements SuperHeroService {
     }
 
 
-    private SuperHeroDto MappingToSuperHeroDto(SuperHero superHero){
-        PowerStatsDto powerStat_Dto = MappingToPowerStatDto(superHero.getPowerStats());
-return SuperHeroDto.builder()
-        .Id(superHero.getId())
-         .name(superHero.getName())
-        .status(superHero.getStatus())
-        .alignment(superHero.getAlignment())
-        .powerStats(powerStat_Dto)
-        .build();
 
 
-    }
-    private PowerStatsDto MappingToPowerStatDto(PowerStats powerStats){
-        return PowerStatsDto.builder()
-    .Id(powerStats.getId())
-     .type(powerStats.getType())
-   .hero_level(powerStats.getHero_level())
-                .strength(powerStats.getStrength())
-                .intelligence(powerStats.getIntelligence())
-                .speed(powerStats.getSpeed())
-        .build();
-
-    }
-    private PowerStats MappingToPowerStatEntity(PowerStatsDto powerStatsDto){
-      return PowerStats.builder()
-        .Id(powerStatsDto.getId())
-        .type(powerStatsDto.getType())
-        .hero_level(powerStatsDto.getHero_level())
-        .strength(powerStatsDto.getStrength())
-        .intelligence(powerStatsDto.getIntelligence())
-        .speed(powerStatsDto.getSpeed())
-              .build();
-
-    }
 }
