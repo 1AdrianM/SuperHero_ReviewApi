@@ -1,6 +1,7 @@
 package com.superheroapi.review.service.Implementation;
 
 import com.superheroapi.review.Dto.ReviewDto;
+import com.superheroapi.review.Mapper.ReviewMapper;
 import com.superheroapi.review.exceptions.ReviewNotFoundException;
 import com.superheroapi.review.exceptions.SuperHeroNotFoundException;
 import com.superheroapi.review.models.Review;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.superheroapi.review.Mapper.ReviewMapper.MappingToDto;
+import static com.superheroapi.review.Mapper.ReviewMapper.MappingToEntity;
 
 @Service
 public class ReviewImplementation implements ReviewService {
@@ -40,7 +44,7 @@ public class ReviewImplementation implements ReviewService {
     public List<ReviewDto> getReviewsByHeroId(int id) {
         List<Review> reviewList = reviewRepository.findSuperHeroById(id);
 
-        return reviewList.stream().map(this::MappingToDto).collect(Collectors.toList());
+        return reviewList.stream().map(ReviewMapper::MappingToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -79,27 +83,5 @@ return MappingToDto(review);
         reviewRepository.delete(review);
 
     }
-    public ReviewDto MappingToDto(Review review){
-        ReviewDto reviewDto = new ReviewDto();
 
-        reviewDto.setId(review.getId());
-        reviewDto.setContent(review.getContent());
-        reviewDto.setStars(reviewDto.getStars());
-        reviewDto.setTitle(reviewDto.getTitle());
-
-        return reviewDto;
-
-
-    } public Review MappingToEntity(ReviewDto reviewDto){
-        Review review = new Review();
-
-        review.setId(reviewDto.getId());
-        review.setContent(reviewDto.getContent());
-        review.setStars(reviewDto.getStars());
-        review.setTitle(reviewDto.getTitle());
-
-        return review;
-
-
-    }
 }

@@ -5,7 +5,7 @@ import com.superheroapi.review.Dto.SuperHeroDto;
 import com.superheroapi.review.models.PowerStats;
 import com.superheroapi.review.models.SuperHero;
 
-public class Mapper
+public class SuperHeroMapper
 {
 
     public static  SuperHeroDto MappingToSuperHeroDto(SuperHero superHero){

@@ -3,12 +3,12 @@ package com.superheroapi.review.service.Implementation;
 import com.superheroapi.review.Dto.PowerStatsDto;
 import com.superheroapi.review.Dto.SuperHeroDto;
 import com.superheroapi.review.Dto.SuperHeroResponse;
+import com.superheroapi.review.Mapper.SuperHeroMapper;
 import com.superheroapi.review.exceptions.SuperHeroNotFoundException;
 import com.superheroapi.review.models.PowerStats;
 import com.superheroapi.review.models.SuperHero;
 import com.superheroapi.review.repository.SuperHeroRepository;
 import com.superheroapi.review.service.SuperHeroService;
-import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.superheroapi.review.Mapper.Mapper.*;
+import static com.superheroapi.review.Mapper.SuperHeroMapper.*;
 
 @Service
 public class SuperHeroImplementation implements SuperHeroService {
@@ -66,7 +66,7 @@ public class SuperHeroImplementation implements SuperHeroService {
         Pageable pageable = PageRequest.of(PageNo, PageSize);
         Page <SuperHero> heroList = superHeroRepository.findAll( pageable);
         List<SuperHero>  list_Pokemon = heroList.getContent();
-        List<SuperHeroDto> content = list_Pokemon.stream().map(p -> MappingToSuperHeroDto(p)).collect(Collectors.toList());
+        List<SuperHeroDto> content = list_Pokemon.stream().map(SuperHeroMapper::MappingToSuperHeroDto).collect(Collectors.toList());
 
         SuperHeroResponse superHeroResponse  = new SuperHeroResponse();
 
